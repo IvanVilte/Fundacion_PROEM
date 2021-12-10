@@ -70,18 +70,24 @@ namespace WinFormsConsultorio {
         }
 
         private void btn_crear_consulta_Click(object sender, EventArgs e) {
-            if(data_GV_medicos_Disponibles.CurrentCell.RowIndex >= 0) {
-                ClinicaEstatica.Obtener_siguiente_paciente();
-                string nombre = (string)data_GV_medicos_Disponibles.CurrentRow.Cells["Nombre"].Value;
-                string apellido = (string)data_GV_medicos_Disponibles.CurrentRow.Cells["Apellido"].Value;
-                Especialidad especialidad = EncontrarEspecialidad.Buscar_especialidad((string)data_GV_medicos_Disponibles.CurrentRow.Cells["Especialidad"].Value);
-                Medico medico_seleccionado = ClinicaEstatica.Buscar_medico(nombre, apellido, especialidad);
+            try {
+                if (data_GV_medicos_Disponibles.CurrentCell.RowIndex >= 0) {
+                    ClinicaEstatica.Obtener_siguiente_paciente();
+                    string nombre = (string)data_GV_medicos_Disponibles.CurrentRow.Cells["Nombre"].Value;
+                    string apellido = (string)data_GV_medicos_Disponibles.CurrentRow.Cells["Apellido"].Value;
+                    Especialidad especialidad = EncontrarEspecialidad.Buscar_especialidad((string)data_GV_medicos_Disponibles.CurrentRow.Cells["Especialidad"].Value);
+                    Medico medico_seleccionado = ClinicaEstatica.Buscar_medico(nombre, apellido, especialidad);
 
-                ClinicaEstatica.Crear_consulta(medico_seleccionado, this.paciente);
-                Close();
-            } else {
-                MessageBox.Show("No se selecciono ningun medico");
+                    ClinicaEstatica.Crear_consulta(medico_seleccionado, this.paciente);
+                    Close();
+                } else {
+                    MessageBox.Show("No se selecciono ningun medico");
+                }
             }
+            catch (NullReferenceException) {
+                MessageBox.Show("No selecciono ningun médico");
+            }
+            
         }
     }
 }
